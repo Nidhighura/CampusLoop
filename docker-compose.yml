@@ -1,0 +1,46 @@
+version: "3.8"
+
+services:
+  mysql:
+    image: mysql:8
+    container_name: mysql_db_docker
+    environment:
+      MYSQL_ROOT_PASSWORD: "#Nidhi7974"
+      MYSQL_DATABASE: campusloop
+    ports:
+      - "3307:3306"  # Localhost:3307 maps to container:3306
+    volumes:
+      - ./mysql_data:/var/lib/mysql
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: phpmyadmin
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+      PMA_USER: root
+      PMA_PASSWORD: "#Nidhi7974"
+    ports:
+      - "8081:80"
+    depends_on:
+      - mysql
+
+  springboot:
+    build: .
+    container_name: scm_springboot_project
+    environment:
+      SERVER_PORT: 8080
+      DB_URL: jdbc:mysql://mysql:3306/campusloop?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Kolkata
+      DB_USERNAME: root
+      DB_PASSWORD: "#Nidhi7974"
+      MAIL_HOST: smtp.gmail.com
+      MAIL_PORT: 587
+      MAIL_USERNAME: batchlcwd@gmail.com
+      MAIL_PASSWORD: dqwxmxfvukvwhnkh
+      CLOUDINARY_API_KEY: 575233445171369
+      CLOUDINARY_API_SECRET: WF88TQpJyKATyZCv4o4M0dx3xEQ
+      CLOUDINARY_CLOUD_NAME: derpgrwbe
+    ports:
+      - "8082:8080"  # Access Spring Boot at localhost:8082
+    depends_on:
+      - mysql
