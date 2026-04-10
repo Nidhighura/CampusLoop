@@ -1,9 +1,10 @@
 spring:
   datasource:
-    url: jdbc:h2:mem:campusloop;MODE=MySQL;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
-    driver-class-name: org.h2.Driver
-    username: sa
-    password:
+    url: jdbc:mysql://localhost:3306/campusloop?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Kolkata
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    username: root
+    password: "#Nidhi7974"
+
   jpa:
     hibernate:
       ddl-auto: create-drop
