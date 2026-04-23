@@ -103,6 +103,11 @@ public class ProductService {
     }
 
     @Transactional(readOnly = true)
+    public List<ProductResponse> getProductsByUser(User user) {
+        return productRepository.findBySellerId(user.getId()).stream().map(this::toResponse).toList();
+    }
+
+    @Transactional(readOnly = true)
     public Product findProduct(Long id) {
         return productRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Product not found with id: " + id));

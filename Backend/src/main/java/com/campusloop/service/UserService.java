@@ -17,6 +17,15 @@ public class UserService {
     @Transactional(readOnly = true)
     public UserProfileResponse getUserProfile(Long id) {
         User user = findUser(id);
+        return toProfileResponse(user);
+    }
+
+    @Transactional(readOnly = true)
+    public UserProfileResponse getUserProfile(User user) {
+        return toProfileResponse(user);
+    }
+
+    private UserProfileResponse toProfileResponse(User user) {
         return new UserProfileResponse(
                 user.getId(),
                 user.getName(),

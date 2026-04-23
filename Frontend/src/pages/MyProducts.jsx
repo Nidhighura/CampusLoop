@@ -10,7 +10,7 @@ const MyProducts = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (user?.id) {
+    if (user) {
       fetchMyProducts();
     }
   }, [user]);
@@ -18,7 +18,7 @@ const MyProducts = () => {
   const fetchMyProducts = async () => {
     setLoading(true);
     try {
-      const res = await api.get(`/users/${user.id}/products`);
+      const res = await api.get('/users/me/products');
       if (res.data.success) {
         setMyProducts(res.data.data);
       }

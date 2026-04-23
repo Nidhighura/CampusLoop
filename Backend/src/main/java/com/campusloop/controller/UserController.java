@@ -1,6 +1,8 @@
 package com.campusloop.controller;
 
 import com.campusloop.dto.response.ApiResponse;
+import com.campusloop.model.User;
+import com.campusloop.service.CurrentUserService;
 import com.campusloop.service.ProductService;
 import com.campusloop.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -20,6 +22,25 @@ public class UserController {
 
     private final UserService userService;
     private final ProductService productService;
+    private final CurrentUserService currentUserService;
+
+    @GetMapping("/me")
+    @Operation(summary = "Fetch the authenticated user's profile")
+    public ResponseEntity<ApiResponse> getCurrentUserProfile() {
+        User currentUser = currentUserService.getAuthenticatedUser();
+        return ResponseEntity.ok(ApiResponse.success(
+                "Authenticated user fetched successfully.",
+                userService.getUserProfile(currentUser)));
+    }
+
+    @GetMapping("/me/products")
+    @Operation(summary = "Fetch products listed by the authenticated user")
+    public ResponseEntity<ApiResponse> getCurrentUserProducts() {
+        User currentUser = currentUserService.getAuthenticatedUser();
+        return ResponseEntity.ok(ApiResponse.success(
+                "Authenticated user products fetched successfully.",
+                productService.getProductsByUser(currentUser)));
+    }
 
     @GetMapping("/{id}")
     @Operation(summary = "Fetch a user profile")

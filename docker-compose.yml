@@ -1,0 +1,56 @@
+services:
+  mysql:
+    image: mysql:8.4
+    container_name: campusloop-mysql
+    environment:
+      MYSQL_DATABASE: campusloop
+      MYSQL_ROOT_PASSWORD: rootpassword
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-prootpassword"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  backend:
+    build:
+      context: ./Backend
+    container_name: campusloop-backend
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      DB_URL: jdbc:mysql://mysql:3306/campusloop?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Kolkata
+      DB_USERNAME: root
+      DB_PASSWORD: rootpassword
+      SERVER_PORT: 8080
+      JWT_SECRET: change-this-secret-key-to-a-secure-32-char-value
+      JWT_EXPIRATION_MS: 86400000
+      OTP_EXPIRATION_MINUTES: 10
+      MAIL_HOST: smtp.gmail.com
+      MAIL_PORT: 587
+      MAIL_USERNAME:
+      MAIL_PASSWORD:
+      CLOUDINARY_CLOUD_NAME:
+      CLOUDINARY_API_KEY:
+      CLOUDINARY_API_SECRET:
+      CLOUDINARY_FOLDER: campusloop/products
+    ports:
+      - "8080:8080"
+
+  frontend:
+    build:
+      context: ./Frontend
+      args:
+        VITE_API_BASE_URL: /api/v1
+    container_name: campusloop-frontend
+    depends_on:
+      - backend
+    ports:
+      - "3000:80"
+
+volumes:
+  mysql_data:

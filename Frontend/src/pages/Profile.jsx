@@ -11,7 +11,7 @@ const Profile = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (user?.id) {
+    if (user) {
       fetchUserProfile();
     }
   }, [user]);
@@ -19,7 +19,7 @@ const Profile = () => {
   const fetchUserProfile = async () => {
     setLoading(true);
     try {
-      const res = await api.get(`/users/${user.id}`);
+      const res = await api.get('/users/me');
       if (res.data.success) {
         setProfileData(res.data.data);
       }
