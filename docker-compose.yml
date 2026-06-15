@@ -1,5 +1,6 @@
 services:
   mysql:
+    restart: always
     image: mysql:8.4
     container_name: campusloop-mysql
     environment:
@@ -16,6 +17,7 @@ services:
       retries: 10
 
   backend:
+    restart: always
     build:
       context: ./Backend
     container_name: campusloop-backend
@@ -27,25 +29,26 @@ services:
       DB_USERNAME: root
       DB_PASSWORD: rootpassword
       SERVER_PORT: 8080
-      JWT_SECRET: change-this-secret-key-to-a-secure-32-char-value
+      JWT_SECRET: 0zk5jkDKlvdEZrcBXP2ixXMKZ3ivHrH4IUC42rbq9mV
       JWT_EXPIRATION_MS: 86400000
       OTP_EXPIRATION_MINUTES: 10
       MAIL_HOST: smtp.gmail.com
       MAIL_PORT: 587
-      MAIL_USERNAME:
-      MAIL_PASSWORD:
-      CLOUDINARY_CLOUD_NAME:
-      CLOUDINARY_API_KEY:
-      CLOUDINARY_API_SECRET:
+      MAIL_USERNAME: supportcampusloop@gmail.com
+      MAIL_PASSWORD: yjlc ezjk amil tlbs
+      CLOUDINARY_CLOUD_NAME: dzhtuudm5
+      CLOUDINARY_API_KEY: 328446675337296
+      CLOUDINARY_API_SECRET: MxJhSQZDF1F4ijXskrVcU_FHU90
       CLOUDINARY_FOLDER: campusloop/products
-    ports:
-      - "8080:8080"
+    ports: []
+      
 
   frontend:
+    restart: always
     build:
       context: ./Frontend
       args:
-        VITE_API_BASE_URL: /api/v1
+        VITE_API_BASE_URL: https://campusloop-uj1v.onrender.com/api/v1
     container_name: campusloop-frontend
     depends_on:
       - backend
