@@ -18,16 +18,25 @@ public class EmailService {
     @Value("${spring.mail.username:}")
     private String mailUsername;
 
-    public void sendOtpEmail(String toEmail, String otp) {
-        if (!StringUtils.hasText(mailUsername)) {
-            log.info("Mail credentials are not configured. OTP for {} is {}", toEmail, otp);
-            return;
-        }
+   public void sendOtpEmail(String toEmail, String otp) {
+    if (!StringUtils.hasText(mailUsername)) {
+        log.info("Mail credentials are not configured. OTP for {} is {}", toEmail, otp);
+        return;
+    }
 
+    try {
         SimpleMailMessage message = new SimpleMailMessage();
         message.setTo(toEmail);
         message.setSubject("CampusLoop OTP Verification");
         message.setText("Your CampusLoop OTP is: " + otp + ". It will expire soon.");
+
         mailSender.send(message);
+
+        log.info("OTP mail sent successfully to {}", toEmail);
+
+    } catch (Exception e) {
+        log.error("MAIL ERROR while sending OTP to {}", toEmail, e);
+        throw e;
     }
+}
 }
